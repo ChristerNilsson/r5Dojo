@@ -1,38 +1,44 @@
-# scale 3 
-# set
-# rotate
-# ett enda click istf två
-
 [W,H] = [innerWidth,innerHeight]
 
-button = (x,y,prompt,click) ->
-	c = p.circle(x,y,50).attr 'fill', "#0f0"
-	t = p.text(x,y,prompt).attr 'font-size', 32
-	p.set c,t
-		.click click
+# COLORS = 'red green yellow blue orange purple cyan pink magenta'.split ' '
+DAYS = "mon tue wed thu fri sat sun".split " "
+
+hide = -> t.hide()
+show = -> t.show()
 
 p = Raphael 0,0,W,H
-p.rect(0,0,W,H).attr {fill: '#888'}
-a = p.text 300,100,"0"
-a.attr {'font-size': 64}
+p.rect 0,0,W,H
+	.attr "fill" ,"black"
 
-add = button 200,200,"Add", ->
-	a.attr {text: parseInt(a.attrs.text) + 2}
-	add.translate 0,10
-	add.rotate 90
+for j in range 7
+	x = 0.02*W 
+	y = 0.12*H*j + 50 
+	p.text x,y,DAYS[j]
+		.attr "fill", "white"
+		.attr 'font-size', 0.02*H
 
-button 300,200,"Mul", ->
-	a.attr {text: parseInt(a.attrs.text) * 2}
+for i in range 24
+	x = 0.04*W*i + 0.05*W
+	y = 0.15*H*j
+	p.text x,y,i
+		.attr "fill","white"
+		.attr 'font-size', 0.02*H
 
-button 400,200,"Div", ->
-	a.attr {text: parseInt(a.attrs.text) / 2}
-
-
-# draw = ->
-# 	for button in buttons
-# 		button.draw()
-
-# mousePressed = ->
-# 	for button in buttons	
-# 		if button.inside(mouseX,mouseY) 
-# 			button.click()
+for i in range 24
+	for j in range 7
+		do -> 
+			hide = -> t.hide()
+			show = -> t.show()
+			x = 0.04*W*i + 0.05*W
+			y = 0.12*H*j + 50
+			r = _.random 1,0.02*W
+			if r > 3
+				c = p.circle x,y,r
+					.attr "fill","hsb(#{(1-r/(.02*W))*0.5}, 1, .75)"
+				t = p.text x,y,r
+					.attr "fill","white"
+					.attr 'font-size',r
+					
+					.hide()
+				p.set c,t
+					.hover show, hide
